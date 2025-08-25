@@ -3,26 +3,42 @@
   <!-- MENU SIDEBAR-->
   <aside class="menu-sidebar d-none d-lg-block">
     <div class="logo">
-      <a routerLink="/products">
-        <img src="assets/images/logo.png" alt="logo" class="img-responsive">
-      </a>
-    </div>
+  <a routerLink="/products" class="logo-link">
+    <img src="assets/images/logo.png" alt="logo" class="img-responsive">
+    <span class="logo-text">EComm</span>
+  </a>
+</div>
+
 
     <app-product-category-menu></app-product-category-menu>
+
     
   </aside>
   <!-- END MENU SIDEBAR-->
 
   <div class="page-container">
     <!-- HEADER DESKTOP-->
-    <header class="header-desktop">
-      <div class="section-content section-content-p30">
-        <div class="container-fluid">
-          <div class="header-wrap"></div>
-          <div class="account-wrap"></div>
+  <header class="header-desktop">
+    <div class="section-content section-content-p30">
+      <div class="container-fluid">
+        <div class="header-wrap d-flex justify-content-between align-items-center">
+          
+          <div class="account-wrap">
+            <!-- Hesap ikonları buraya -->
+          </div>
+
+          <app-search></app-search>
+
+          <app-card-status></app-card-status>
+          
         </div>
       </div>
-    </header>
+    </div>
+  </header>
+
+            
+
+
     <!-- END HEADER DESKTOP-->
 
     <!-- MAIN CONTENT-->

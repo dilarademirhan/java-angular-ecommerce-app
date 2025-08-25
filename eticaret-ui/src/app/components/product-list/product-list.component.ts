@@ -1,38 +1,114 @@
 import { Component } from '@angular/core';
-import { Product } from '../../common/product';
 import { ProductService } from '../../services/product.service';
-import { CommonModule, NgForOf } from "@angular/common";
-import { ActivatedRoute } from '@angular/router';
+import { Product } from '../../common/product';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CardService } from '../../services/card.service';
+import { CardItem } from '../../common/card-item';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [NgForOf, CommonModule],
+  imports: [RouterModule, CommonModule,NgbModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
 export class ProductListComponent {
-    
+
   products: Product[] = [];
+  currentCategoryId: number = 10;
+  searchMode: boolean = false;
 
-  currentCategoryId: number = 1; // Default category ID
+  previousCategoryId: number = 1;
+  thePageNumber: number = 1;
+  thePageSize: number = 5;
+  theTotalElements: number = 0;
+  previousKeyword: string = "";
 
-  constructor(private productService: ProductService, private route: ActivatedRoute) {}
+  constructor(private productService: ProductService, 
+    private route: ActivatedRoute, private cardService: CardService) {
 
-  ngOnInit(): void {
+  }
+
+  ngOnInit() {
     this.route.paramMap.subscribe(() => {
-    this.listProducts();
-    }    );
+      this.listProducts();
+    });
   }
 
   listProducts() {
-    this.currentCategoryId = +this.route.snapshot.paramMap.get('id')! || 1;
 
-    this.productService.getProductList(this.currentCategoryId).subscribe({
-      next: (data) => {
-        console.log('Response data:', data);
-        this.products = data;
-      }
-    });
+    this.searchMode = this.route.snapshot.paramMap.has('keyword');
+
+    if(this.searchMode){
+      this.handleSearchProducts();
+    }else {
+      this.handleListProducts();
+    }
   }
+
+  handleSearchProducts(){
+
+    const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
+
+    if(this.previousKeyword != theKeyword){
+      this.thePageNumber = 1;
+    }
+
+    this.previousKeyword = theKeyword;
+
+    this.productService.searchProductsPaginate(this.thePageNumber - 1, this.thePageSize, theKeyword
+    ).subscribe(
+      this.processResult()
+    )
+  }
+
+  handleListProducts(){
+
+    const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
+
+    if(hasCategoryId){
+      this.currentCategoryId = +this.route.snapshot.paramMap.get('id')!;
+    }else {
+      this.productService.getAllProducts().subscribe(
+        data => {
+          this.products = data;
+        }
+      );
+    }
+
+    if(this.previousCategoryId != this.currentCategoryId){
+
+      this.thePageNumber = 1;
+    }
+
+    this.previousCategoryId = this.currentCategoryId;
+
+    this.productService.getProductListPaginate(this.thePageNumber -1, this.thePageSize,
+                                      this.currentCategoryId).subscribe(
+                                        this.processResult()
+    )
+  }
+
+  updatePageSize(pageSize: string){
+    this.thePageSize = +pageSize;
+    this.thePageNumber =1;
+    this.listProducts();
+  }
+
+  processResult() {
+    return (data: any) => {
+      this.products = data._embedded.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    };
+  }
+
+  addToCard(tempProduct: Product){
+    const theCardItem = new CardItem(tempProduct);
+    this.cardService.addToCard(theCardItem);
+  }
+
 }

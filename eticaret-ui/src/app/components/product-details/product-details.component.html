@@ -1,0 +1,12 @@
+<div class="detail-section">
+      <div class="container-fluid">
+        <img [src]="product.imageUrl" alt="Product Image" class="detail-image">
+        <h3>{{ product.name }}</h3>
+        <div class="price">
+            <span class="current-price">{{ product.unitPrice | currency: 'TL' }}</span>                
+        </div>
+        <p>{{ product.description }}</p>
+        <a href="#" class="btn btn-primary">Sepete Ekle</a>
+        <a routerLink="/products" class="btn btn-secondary">Geri Dön</a>
+      </div>
+    </div>

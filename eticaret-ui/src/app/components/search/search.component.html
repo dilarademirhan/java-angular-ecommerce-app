@@ -1,0 +1,12 @@
+<form class="form-header" onsubmit="return false;" method="GET">
+  <input #myInput
+    class="au-input au-input--xl"
+    type="text"
+    name="search"
+    placeholder="Search for datas &amp; reports..."
+    (keyup.enter)="doSearch(myInput.value)"
+  />
+  <button class="au-btn--submit" type="submit" (click)="doSearch(myInput.value)">
+    <i class="zmdi zmdi-search"></i>
+  </button>
+</form>
