@@ -3,32 +3,41 @@
     <div class="container-fluid">
 
       <div class="row">
-        <div *ngFor="let tempProduct of products" class="col-md-4 mb-3">
-          <div class="product-box text-center">
-            
+        <div *ngFor="let tempProduct of products" class="col-md-4 col-sm-6 mb-4">
+          <div class="product-box d-flex flex-column text-center">
+
+            <!-- Ürün Resmi -->
             <a [routerLink]="['/products', tempProduct.id]">
-              <img [src]="tempProduct.imageUrl" alt="Product Image" class="img-fluid mb-2">
+              <img [src]="tempProduct.imageUrl" alt="Product Image" class="product-image mb-3">
             </a>
-            
-            <a [routerLink]="['/products', tempProduct.id]">
+
+            <!-- Ürün Adı -->
+            <a class="product-name mb-2" [routerLink]="['/products', tempProduct.id]">
               <h5>{{ tempProduct.name }}</h5>
             </a>
-            
-            <div class="price mb-2">
+
+            <!-- Ürün Fiyatı -->
+            <div class="price mb-3">
               <span class="current-price">
                 {{ tempProduct.unitPrice | currency:'TRY':'symbol':'1.0-0' }}
               </span>
             </div>
-            
-            <button (click)="addToCard(tempProduct)" class="btn btn-primary">Sepete Ekle</button>
+
+            <!-- Sepete Ekle Butonu -->
+            <button (click)="addToCard(tempProduct)" class="btn btn-primary mt-auto">
+              Sepete Ekle
+            </button>
+
           </div>
         </div>
       </div>
 
+      <!-- Ürün Yoksa Uyarı -->
       <div *ngIf="products.length === 0" class="alert alert-warning text-center" role="alert">
         Ürün bulunamadı
       </div>
 
+      <!-- Sayfalama -->
       <div class="footer-pagination mt-4">
         <div class="row justify-content-center">
           <div class="col-md-6 text-center">
@@ -36,27 +45,23 @@
               [(page)]="thePageNumber"
               [collectionSize]="theTotalElements"
               [pageSize]="thePageSize"
-              (pageChange)="listProducts()"
               [maxSize]="5"
               [rotate]="true"
-              [ellipses]="false">
+              [ellipses]="false"
+              (pageChange)="listProducts()">
             </ngb-pagination>
           </div>
 
-
-                            <div class="col-md-3 mt-2" style="text-align: right;">
-                                <span class="mr-2">Sayfa Boyutu</span>
-
-                                <select #myPageSelect (change)="updatePageSize(myPageSelect.value)">
-
-                                    <option>2</option>
-                                    <option selected="true">5</option>
-                                    <option>10</option>
-                                    <option>20</option>
-                                    <option>50</option>
-                                </select>
-                            </div>
-                            
+          <div class="col-md-3 mt-2 text-end">
+            <span class="mr-2">Sayfa Boyutu</span>
+            <select #myPageSelect (change)="updatePageSize(myPageSelect.value)">
+              <option>2</option>
+              <option selected>5</option>
+              <option>10</option>
+              <option>20</option>
+              <option>50</option>
+            </select>
+          </div>
         </div>
       </div>
 
