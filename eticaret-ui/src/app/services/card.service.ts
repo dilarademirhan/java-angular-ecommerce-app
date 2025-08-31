@@ -27,10 +27,10 @@ export class CardService {
       this.cardItems.push(theCardItem);
     }
 
-    this.computeCartTotals();
+    this.computeCardTotals();
   }
 
-  computeCartTotals() {
+  computeCardTotals() {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
 
@@ -41,5 +41,22 @@ export class CardService {
 
     this.totalPrice.next(totalPriceValue);
     this.totalQuantity.next(totalQuantityValue);
+  }
+  decrementQuantity(theCardItem: CardItem) {
+    theCardItem.quantity--;
+
+    if (theCardItem.quantity === 0) {
+      this.remove(theCardItem);
+    } else {
+      this.computeCardTotals();
+    }
+  }
+  remove(theCardItem: CardItem) {
+    const itemIndex = this.cardItems.findIndex(tempCardItem => tempCardItem.id === theCardItem.id);
+
+    if (itemIndex > -1) {
+      this.cardItems.splice(itemIndex, 1);
+      this.computeCardTotals();
+    }
   }
 }

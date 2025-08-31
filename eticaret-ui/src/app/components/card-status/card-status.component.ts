@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CardService } from '../../services/card.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-card-status',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './card-status.component.html',
   styleUrl: './card-status.component.css'
 })

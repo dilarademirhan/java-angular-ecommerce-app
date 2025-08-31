@@ -1,0 +1,51 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+
+      <table class="table table-borderless table-data3 text-center" *ngIf="cardItems.length > 0">
+        <thead>
+          <tr>
+            <th style="width: 20%;">Product</th>
+            <th style="width: 20%;">Price</th>
+            <th style="width: 20%;">Quantity</th>
+            <th style="width: 20%;">Total</th>
+            <th style="width: 20%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of cardItems">
+            <td>
+              <div style="display: flex; align-items: center;">
+                <img [src]="item.imageUrl" 
+                     alt="Product Image" 
+                     style="width: 50px; height: 50px; margin-right: 10px;">
+                <div>
+                  <h6>{{ item.name }}</h6>
+                </div>
+              </div>
+            </td>
+            <td>{{ item.unitPrice | currency: 'TL' }}</td>
+            <td>
+            <div class="quantity-controls">
+              <button (click)="decrementQuantity(item)" class="btn btn-secondary btn-sm">-</button>
+              <span class="mx-2">{{ item.quantity }}</span>
+              <button (click)="incrementQuantity(item)" class="btn btn-secondary btn-sm">+</button>
+            </div>
+            </td>
+            <td>{{ item.unitPrice * item.quantity | currency: 'TL' }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm">
+                <i class="fa fa-trash"></i> 
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="cardItems.length == 0" class="text-center mt-5">
+        <h3>Your cart is empty.</h3>
+      </div>
+
+    </div>
+  </div>
+</div>
